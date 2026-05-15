@@ -17,7 +17,6 @@ const pointsValue = document.getElementById('points-value');
 const questionCounter = document.getElementById('question-counter');
 const finalScore = document.getElementById('final-score');
 
-// Caricamento dei dati all'avvio
 document.getElementById('start-btn').addEventListener('click', startQuiz);
 document.getElementById('restart-btn').addEventListener('click', startQuiz);
 
@@ -28,32 +27,33 @@ function startQuiz() {
     score = 0;
     currentQuestionIndex = 0;
 
-    // Se non abbiamo ancora le domande, le scarichiamo
-    if (questions.length === 0) {
-        Papa.parse(CSV_URL, {
-            download: true,
-            header: true,
-            complete: function(results) {
-                // Filtra eventuali righe vuote
-                questions = results.data.filter(q => q.Domanda);
-                // Mescola l'ordine delle domande
-                questions.sort(() => Math.random() - 0.5);
-                showQuestion();
-            }
-        });
-    } else {
-        questions.sort(() => Math.random() - 0.5);
-        showQuestion();
-    }
+    // Scarichiamo le domande dal tuo Google Sheet ad ogni partita
+    Papa.parse(CSV_URL, {
+        download: true,
+        header: true,
+        complete: function(results) {
+            // Filtra eventuali righe vuote
+            let allQuestions = results.data.filter(q => q.Domanda);
+            
+            // 1. Mischia tutte le 100+ domande in modo casuale
+            allQuestions.sort(() => Math.random() - 0.5);
+            
+            // 2. Prendi solo le prime 10 per questa partita
+            questions = allQuestions.slice(0, 10);
+            
+            // 3. Ordinale per difficoltà: dai punti più bassi ai più alti
+            questions.sort((a, b) => parseInt(a.Punti) - parseInt(b.Punti));
+
+            showQuestion();
+        }
+    });
 }
 
 function showQuestion() {
-    // Reimposta il colore dei bottoni
     btnA.className = "btn option-btn";
     btnB.className = "btn option-btn";
     btnC.className = "btn option-btn";
 
-    // Mostra la domanda attuale (facciamo 10 domande a partita)
     if (currentQuestionIndex >= 10 || currentQuestionIndex >= questions.length) {
         endQuiz();
         return;
@@ -68,7 +68,6 @@ function showQuestion() {
     btnB.innerText = currentQ.Opzione_B;
     btnC.innerText = currentQ.Opzione_C;
 
-    // Assegna gli eventi di controllo risposta
     btnA.onclick = () => checkAnswer('A', btnA);
     btnB.onclick = () => checkAnswer('B', btnB);
     btnC.onclick = () => checkAnswer('C', btnC);
@@ -78,7 +77,6 @@ function checkAnswer(selectedOption, clickedBtn) {
     const currentQ = questions[currentQuestionIndex];
     const correctOption = currentQ.Risposta_Corretta.trim();
     
-    // Disabilita i pulsanti temporaneamente
     btnA.onclick = null; btnB.onclick = null; btnC.onclick = null;
 
     if (selectedOption === correctOption) {
@@ -86,13 +84,11 @@ function checkAnswer(selectedOption, clickedBtn) {
         score += parseInt(currentQ.Punti);
     } else {
         clickedBtn.classList.add('wrong');
-        // Mostra qual era quella giusta
         if (correctOption === 'A') btnA.classList.add('correct');
         if (correctOption === 'B') btnB.classList.add('correct');
         if (correctOption === 'C') btnC.classList.add('correct');
     }
 
-    // Passa alla prossima domanda dopo 1.5 secondi
     setTimeout(() => {
         currentQuestionIndex++;
         showQuestion();
