@@ -1,5 +1,5 @@
 // INCOLLA QUI IL LINK DEL PASSO 1
-const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRi929-CE5a4t5QkZPXp-usmRedm7rQPwljEMhU0HU_XkKzCsszxNEa2-7x5MVkT5T8wEyuwSzHKJGQ/pub?output=csv";
+const CSV_URL = "INCOLLA_QUI_IL_TUO_LINK_CSV_PUBBLICO";
 
 let questions = [];
 let currentQuestionIndex = 0;
