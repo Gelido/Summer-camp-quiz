@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Great Summer Camp Quiz</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Libreria per leggere il file CSV -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+</head>
+<body>
+    <div class="quiz-container">
+        <!-- Inserisci qui il nome esatto della tua immagine -->
+        <img src="logo.png" alt="Logo Great Summer Camp" id="logo">
+        <h1>Great Summer Camp Quiz</h1>
+        
+        <div id="setup-screen">
+            <p>Mettiti alla prova! Rispondi correttamente e fai più punti possibile.</p>
+            <button id="start-btn" class="btn">Inizia il Quiz!</button>
+        </div>
+
+        <div id="quiz-screen" class="hidden">
+            <div class="header-quiz">
+                <span id="question-counter">Domanda: 1</span>
+                <span id="points-badge">Vale: <span id="points-value">0</span> pt</span>
+            </div>
+            <h2 id="question-text">Caricamento...</h2>
+            <div id="options-container">
+                <button class="btn option-btn" id="btn-A"></button>
+                <button class="btn option-btn" id="btn-B"></button>
+                <button class="btn option-btn" id="btn-C"></button>
+            </div>
+        </div>
+
+        <div id="result-screen" class="hidden">
+            <h2>Bravissimo!</h2>
+            <p>Hai totalizzato: <span id="final-score">0</span> punti</p>
+            <button id="restart-btn" class="btn">Gioca di nuovo</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
